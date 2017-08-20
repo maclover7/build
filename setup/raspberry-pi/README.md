@@ -180,8 +180,9 @@ Set up running system, steps to execute in `raspi-config`:
 
 * Expand Filesystem
 * Change User Password
+* Internationalisation Options - Change Locale to en_US.UTF8
 * Internationalisation Options - Change Keyboard Layout - Generic non-Intl, English (US)
-* Overclock Pi 1 B+ to High
+* Overclock Pi 1 B+ to Medium
 * Advanced - Hostname, replace `_` with `--`
 * Advanced - Enable SSH
 

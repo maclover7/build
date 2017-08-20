@@ -58,7 +58,7 @@
         name: "{{ item }}"
         update_cache: yes
         state: latest
-      with_items: packages
+      with_items: "{{ packages }}"
       tags: general
 
     - name: gcc | Install gcc 4.8
@@ -134,6 +134,17 @@
       ignore_errors: True
       tags: nfs
 
+    - name: NFS | Turn on idmapd
+      lineinfile:
+        dest: /etc/default/nfs-common
+        state: present
+        line: 'NEED_IDMAPD=yes'
+      tags: nfs
+
+    - name: NFS | Restart nfs-common service
+      service: name=nfs-common state=restarted enabled=yes
+      tags: nfs
+
     - name: NFS | Mount all
       mount:
         name: "/home/{{ server_user }}/{{ item.dst }}"
@@ -156,10 +167,10 @@
       tags: jenkins
 
     - name: ccache | Install ccache
-      include: ../ansible-tasks/ccache.yaml version=3.3
+      include: ../ansible-tasks/ccache.yaml version=3.3.4
       tags: ccache
 
-    - include: ../ansible-tasks/git.yaml version=2.10.0
+    - include: ../ansible-tasks/git.yaml version=2.14.1
       tags: git
 
     - include: ../ansible-tasks/monit.yaml monit_conf_file=../ansible-tasks/resources/monit-jenkins.conf
