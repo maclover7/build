@@ -1,0 +1,34 @@
+---
+
+#
+# set up a windows jenkins worker
+#
+
+- hosts:
+  - test
+  - release
+  - "!test-joyent-freebsd10-x64-2"
+  - "!test-rackspace-freebsd10-x64-1"
+
+  pre_tasks:
+    - name: check if secret is properly set
+      fail:
+      failed_when: not secret
+
+  tasks:
+    - name: gather facts
+      setup:
+    #- name: Download and Install Windows Updates
+      #win_updates:
+      #register: update_result
+
+    #- name: Reboot machine if necessary
+      #win_reboot:
+      #when: update_result.reboot_required
+
+    - name: Create C:\TEMP directory
+      win_file:
+        path: 'C:\TEMP'
+        state: directory
+    - include_role:
+        name: jenkins-windows
