@@ -5,7 +5,7 @@ git clone https://github.com/nodejs/build.git
 
 . ./build/jenkins/scripts/node-test-commit-pre.sh
 
-if test $IGNORE_FLAKY_TESTS = "true"
+if [[ $IGNORE_FLAKY_TESTS = "true" ]]
 then
   FLAKY_TESTS_MODE=dontcare
 else
@@ -22,7 +22,7 @@ else
   MAKE_JOB_COUNT=$(getconf NPROCESSORS_ONLN)
 fi
 
-if test $NODE_NAME = *"freebsd"*
+if [[ $NODE_NAME = *"freebsd"* ]]
 then
   MAKE=gmake
 else
