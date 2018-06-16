@@ -14,7 +14,9 @@ echo FLAKY_TESTS_MODE=$FLAKY_TESTS_MODE
 
 . ./build/jenkins/scripts/select-compiler.sh
 
-if getconf _NPROCESSORS_ONLN; then
+if [[ $NODE_NAME = *"smartos"* ]]; then
+  MAKE_JOB_COUNT=4
+elif getconf _NPROCESSORS_ONLN; then
   MAKE_JOB_COUNT=$(getconf _NPROCESSORS_ONLN)
 else
   MAKE_JOB_COUNT=$(getconf NPROCESSORS_ONLN)
