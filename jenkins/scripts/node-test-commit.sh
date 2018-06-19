@@ -68,12 +68,6 @@ elif [[ "$nodes" =~ centos[67]-(arm)?64-gcc6 ]]; then
   . /opt/rh/devtoolset-6/enable
 fi
 
-exec_cmd=" \
-  NODE_TEST_DIR=${HOME}/node-tmp NODE_COMMON_PORT=15000 PYTHON=python \
-  FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS=$CONFIG_FLAGS \
-  $MAKE run-ci $MAKE_ARGS \
-"
-
 if [[ "$NODE_LABELS" =~ docker-armv7 ]]; then
   echo "Checking node label: $nodes"
   case $nodes in
@@ -86,8 +80,9 @@ if [[ "$NODE_LABELS" =~ docker-armv7 ]]; then
   echo "$exec_cmd" > node-ci-exec
   sudo docker-node-exec.sh -v $debian
 else
-  my_flags="PYTHON=python FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS=--dest-cpu=ppc64"
-  $my_flags NODE_TEST_DIR=${HOME}/node-tmp $MAKE run-ci -j $JOBS
+  NODE_TEST_DIR=${HOME}/node-tmp NODE_COMMON_PORT=15000 PYTHON=python \
+  FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS=$CONFIG_FLAGS \
+  $MAKE run-ci $MAKE_ARGS
 fi
 
 . ./build/jenkins/scripts/node-test-commit-diagnostics.sh after
