@@ -90,7 +90,7 @@ if [[ "$NODE_LABELS" =~ docker-armv7 ]]; then
   echo "$exec_cmd" > node-ci-exec
   sudo docker-node-exec.sh -v $debian
 else
-  sh -c "$exec_cmd"
+  $exec_cmd
 fi
 
 . ./build/jenkins/scripts/node-test-commit-diagnostics.sh after
