@@ -44,7 +44,7 @@ fi
 
 MAKE_ARGS="-j $MAKE_JOB_COUNT"
 
-if [ $(make -v | grep 'GNU Make 4' -c) -ne 0 ]; then
+if [[ $NODE_NAME != *"aix61"* ]] && [ $(make -v | grep 'GNU Make 4' -c) -ne 0 ]; then
   MAKE_ARGS="$MAKE_ARGS --output-sync=target"
 fi
 
