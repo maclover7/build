@@ -16,6 +16,10 @@ echo FLAKY_TESTS_MODE=$FLAKY_TESTS_MODE
 
 if [[ $NODE_NAME = *"smartos"* ]]; then
   MAKE_JOB_COUNT=4
+elif [[ $NODE_NAME = *"centos7-arm64"* ]] ||
+  [[ $NODE_NAME = *"docker-armv7"* ]] ||
+  [[ $NODE_NAME = *"ubuntu1604-arm64"* ]]; then
+  MAKE_JOB_COUNT=2
 elif getconf _NPROCESSORS_ONLN; then
   MAKE_JOB_COUNT=$(getconf _NPROCESSORS_ONLN)
 else
@@ -46,6 +50,29 @@ elif [[ "$nodes" =~ centos[67]-(arm)?64-gcc6 ]]; then
   . /opt/rh/devtoolset-6/enable
 fi
 
-NODE_TEST_DIR=${HOME}/node-tmp NODE_COMMON_PORT=15000 PYTHON=python FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS=$CONFIG_FLAGS V=1 $MAKE run-ci $MAKE_ARGS
+exec_cmd=" \
+  NODE_TEST_DIR=${HOME}/node-tmp \
+  NODE_COMMON_PORT=15000 \
+  PYTHON=python \
+  FLAKY_TESTS=$FLAKY_TESTS_MODE \
+  CONFIG_FLAGS=$CONFIG_FLAGS \
+  V=1 \
+  $MAKE run-ci $MAKE_ARGS \
+"
+
+if [[ "$NODE_LABELS" =~ docker-armv7 ]]; then
+  echo "Checking node label: $nodes"
+  case $nodes in
+    debian7-docker-armv7) debian=wheezy;;
+    debian8-docker-armv7) debian=jessie;;
+    debian9-docker-armv7) debian=stretch;;
+    *) echo Error: Unsupported label $nodes; exit 1
+  esac
+
+  echo "$exec_cmd" > node-ci-exec
+  sudo docker-node-exec.sh -v $debian
+else
+  sh -c "$exec_cmd"
+fi
 
 . ./build/jenkins/scripts/node-test-commit-diagnostics.sh after
