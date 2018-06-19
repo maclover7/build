@@ -86,11 +86,7 @@ if [[ "$NODE_LABELS" =~ docker-armv7 ]]; then
   echo "$exec_cmd" > node-ci-exec
   sudo docker-node-exec.sh -v $debian
 else
-  my_cmd=" \
-    NODE_TEST_DIR=${HOME}/node-tmp PYTHON=python FLAKY_TESTS=$FLAKY_TESTS_MODE \
-    CONFIG_FLAGS='$CONFIG_FLAGS --dest-cpu=ppc64' gmake run-ci -j $JOBS \
-  "
-  $my_cmd
+    NODE_TEST_DIR=${HOME}/node-tmp PYTHON=python FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS='$CONFIG_FLAGS --dest-cpu=ppc64' gmake run-ci -j $JOBS
 fi
 
 . ./build/jenkins/scripts/node-test-commit-diagnostics.sh after
