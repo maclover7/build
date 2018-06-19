@@ -26,6 +26,10 @@ else
   MAKE_JOB_COUNT=$(getconf NPROCESSORS_ONLN)
 fi
 
+if ! [ -z ${JOBS+x} ]; then
+  MAKE_JOB_COUNT=$JOBS
+fi
+
 MAKE_ARGS="-j $MAKE_JOB_COUNT"
 
 if [ $(make -v | grep 'GNU Make 4' -c) -ne 0 ]; then
