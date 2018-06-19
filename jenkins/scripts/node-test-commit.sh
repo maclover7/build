@@ -69,12 +69,8 @@ elif [[ "$nodes" =~ centos[67]-(arm)?64-gcc6 ]]; then
 fi
 
 exec_cmd=" \
-  NODE_TEST_DIR=${HOME}/node-tmp \
-  NODE_COMMON_PORT=15000 \
-  PYTHON=python \
-  FLAKY_TESTS=$FLAKY_TESTS_MODE \
-  CONFIG_FLAGS=$CONFIG_FLAGS \
-  V=1 \
+  NODE_TEST_DIR=${HOME}/node-tmp NODE_COMMON_PORT=15000 PYTHON=python \
+  FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS=$CONFIG_FLAGS V=1 \
   $MAKE run-ci $MAKE_ARGS \
 "
 
