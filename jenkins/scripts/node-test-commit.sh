@@ -77,7 +77,11 @@ if [[ "$NODE_LABELS" =~ docker-armv7 ]]; then
     *) echo Error: Unsupported label $nodes; exit 1
   esac
 
-  echo "$exec_cmd" > node-ci-exec
+  echo " \
+    NODE_TEST_DIR=${HOME}/node-tmp NODE_COMMON_PORT=15000 PYTHON=python \
+    FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS=$CONFIG_FLAGS \
+    $MAKE run-ci $MAKE_ARGS \
+  " > node-ci-exec
   sudo docker-node-exec.sh -v $debian
 else
   NODE_TEST_DIR=${HOME}/node-tmp NODE_COMMON_PORT=15000 PYTHON=python \
