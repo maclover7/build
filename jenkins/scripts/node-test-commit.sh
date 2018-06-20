@@ -59,6 +59,12 @@ elif [[ "$nodes" =~ centos[67]-(arm)?64-gcc6 ]]; then
   . /opt/rh/devtoolset-6/enable
 fi
 
+exec_cmd=" \
+  NODE_TEST_DIR=${HOME}/node-tmp NODE_COMMON_PORT=15000 PYTHON=python \
+  FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS=$CONFIG_FLAGS \
+  $MAKE run-ci $MAKE_ARGS \
+"
+
 if [[ "$NODE_LABELS" =~ docker-armv7 ]]; then
   echo "Checking node label: $nodes"
   case $nodes in
@@ -67,12 +73,6 @@ if [[ "$NODE_LABELS" =~ docker-armv7 ]]; then
     debian9-docker-armv7) debian=stretch;;
     *) echo Error: Unsupported label $nodes; exit 1
   esac
-
-  exec_cmd=" \
-    NODE_TEST_DIR=${HOME}/node-tmp NODE_COMMON_PORT=15000 PYTHON=python \
-    FLAKY_TESTS=$FLAKY_TESTS_MODE CONFIG_FLAGS=$CONFIG_FLAGS \
-    $MAKE run-ci $MAKE_ARGS \
-  "
 
   echo $exec_cmd > node-ci-exec
   sudo docker-node-exec.sh -v $debian
