@@ -15,7 +15,7 @@ if [ -z ${JOBS+x} ]; then
   JOBS=$(getconf _NPROCESSORS_ONLN)
 fi
 
-if [[ $nodes = *"ubuntu1604_sharedlibs_openssl110_x64"* ]]; then
+if [[ $JOB_NAME = *"ubuntu1604_sharedlibs_openssl110_x64"* ]]; then
   export LD_LIBRARY_PATH=${OPENSSL110DIR}/lib/
   export DYLD_LIBRARY_PATH=${OPENSSL110DIR}/lib/
   export PATH=${OPENSSL110DIR}/bin/:$PATH
@@ -31,7 +31,7 @@ if [[ $nodes = *"ubuntu1604_sharedlibs_openssl110_x64"* ]]; then
   if [ X"$(echo $OPENSSL_VERSION | grep 1\.1\.0)" = X"" ]; then
     fail_with_message "Not built with OpenSSL 1.1.0, exiting"
   fi
-elif [[ $nodes = *"ubuntu1604_sharedlibs_fips20_x64"* ]]; then
+elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_fips20_x64"* ]]; then
   # First run of test-ci inside of run-ci either runs with FIPS on in 4.X or 5.X
   # or with FIPS off in 6.X or later (as the default was changed)
 
@@ -60,7 +60,7 @@ elif [[ $nodes = *"ubuntu1604_sharedlibs_fips20_x64"* ]]; then
     NODE_TEST_DIR=${HOME}/node-tmp PYTHON=python FLAKY_TESTS=$FLAKY_TESTS_MODE TEST_CI_ARGS="--node-args --enable-fips" make test-ci -j $JOBS
     mv test.tap test-fips-on.tap
   fi
-elif [[ $nodes = *"ubuntu1604_sharedlibs_debug_x64"* ]]; then
+elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_debug_x64"* ]]; then
   # see https://github.com/nodejs/node/issues/17016
   sed -i 's/\[\$system==linux\]/[$system==linux]\ntest-error-reporting : PASS, FLAKY/g' test/parallel/parallel.status
   # see https://github.com/nodejs/node/issues/17017
@@ -91,7 +91,7 @@ elif [[ $nodes = *"ubuntu1604_sharedlibs_debug_x64"* ]]; then
   # Clean up any leftover processes, error if found.
   ps awwx | grep Debug/node | grep -v grep
   ps awwx | grep Debug/node | grep -v grep | awk '{print $$1}' | xargs -rl kill || true
-elif [[ $nodes = *"ubuntu1604_sharedlibs_openssl102_x64"* ]]; then
+elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_openssl102_x64"* ]]; then
   export LD_LIBRARY_PATH=${OPENSSL102DIR}/lib/
   export DYLD_LIBRARY_PATH=${OPENSSL102DIR}/lib/
   export PATH=${OPENSSL102DIR}/bin/:$PATH
@@ -107,7 +107,7 @@ elif [[ $nodes = *"ubuntu1604_sharedlibs_openssl102_x64"* ]]; then
   if [ X"$(echo $OPENSSL_VERSION | grep 1\.0\.2)" = X"" ]; then
     fail_with_message "Not built with OpenSSL 1.0.2, exiting"
   fi
-elif [[ $nodes = *"ubuntu1604_sharedlibs_zlib_x64"* ]]; then
+elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_zlib_x64"* ]]; then
   export LD_LIBRARY_PATH=${ZLIB12DIR}/lib/
   export DYLD_LIBRARY_PATH=${ZLIB12DIR}/lib/
 
@@ -122,7 +122,7 @@ elif [[ $nodes = *"ubuntu1604_sharedlibs_zlib_x64"* ]]; then
   if [ X"$(echo $ZLIB_VERSION | grep 1\.2\.11)" = X"" ]; then
     fail_with_message "Not built with zlib 1.2.11, exiting"
   fi
-elif [[ $nodes = *"ubuntu1604_sharedlibs_openssl111_x64"* ]]; then
+elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_openssl111_x64"* ]]; then
   export LD_LIBRARY_PATH=${OPENSSL111DIR}/lib/
   export DYLD_LIBRARY_PATH=${OPENSSL111DIR}/lib/
   export PATH=${OPENSSL111DIR}/bin/:$PATH
@@ -138,7 +138,7 @@ elif [[ $nodes = *"ubuntu1604_sharedlibs_openssl111_x64"* ]]; then
   if [ X"$(echo $OPENSSL_VERSION | grep 1\.1\.1)" = X"" ]; then
     fail_with_message "Not built with OpenSSL 1.1.1, exiting"
   fi
-elif [[ $nodes = *"ubuntu1604_sharedlibs_withoutintl_x64"* ]]; then
+elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_withoutintl_x64"* ]]; then
   PYTHON=python \
    NODE_TEST_DIR=${HOME}/node-tmp \
    FLAKY_TESTS=$FLAKY_TESTS_MODE \
@@ -155,7 +155,7 @@ elif [[ $nodes = *"ubuntu1604_sharedlibs_withoutintl_x64"* ]]; then
   if [ X"$PROCESS_VERSIONS_INTL" != X"undefined" ]; then
     fail_with_message "process.versions.icu not undefined, exiting"
   fi
-elif [[ $nodes = *"ubuntu1604_sharedlibs_withoutssl_x64"* ]]; then
+elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_withoutssl_x64"* ]]; then
   PYTHON=python \
    NODE_TEST_DIR=${HOME}/node-tmp \
    FLAKY_TESTS=$FLAKY_TESTS_MODE \
@@ -171,7 +171,7 @@ elif [[ $nodes = *"ubuntu1604_sharedlibs_withoutssl_x64"* ]]; then
   if test $? -eq 0; then
     fail_with_message 'require("crypto") did not fail, exiting'
   fi
-elif [[ $nodes = *"ubuntu1604_sharedlibs_shared_x64"* ]]; then
+elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_shared_x64"* ]]; then
   PYTHON=python \
    NODE_TEST_DIR=${HOME}/node-tmp \
    FLAKY_TESTS=$FLAKY_TESTS_MODE \
