@@ -10,6 +10,11 @@ if [[ $NODE_NAME = *"aix61"* ]]; then
   exit 0
 fi
 
+if [[ $JOB_NAME = *"containered"* ]]; then
+  curl https://raw.githubusercontent.com/maclover7/build/jm-test-linuxone/jenkins/scripts/node-test-commit-containers.sh | bash -ex -s
+  exit 0
+fi
+
 if [[ $IGNORE_FLAKY_TESTS = "true" ]]; then
   FLAKY_TESTS_MODE=dontcare
 else
