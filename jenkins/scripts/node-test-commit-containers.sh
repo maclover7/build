@@ -89,7 +89,7 @@ elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_debug_x64"* ]]; then
     async-hooks default known_issues
 
   # Clean up any leftover processes, error if found.
-  ps awwx | grep Debug/node | grep -v grep
+  ps awwx | grep Debug/node | grep -v grep || true
   ps awwx | grep Debug/node | grep -v grep | awk '{print $$1}' | xargs -rl kill || true
 elif [[ $JOB_NAME = *"ubuntu1604_sharedlibs_openssl102_x64"* ]]; then
   export LD_LIBRARY_PATH=${OPENSSL102DIR}/lib/
